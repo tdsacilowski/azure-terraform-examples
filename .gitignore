@@ -1,0 +1,28 @@
+### macOS
+.DS_Store
+
+### Kitchen
+.kitchen/
+.kitchen.local.yml
+
+### JetBrains
+.idea/
+
+### Packer
+packer_cache/
+*.box
+
+### Vagrant
+vagrant/
+.vagrant/
+
+### Logs
+*.log
+
+### Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+backend*.tf
+backends/
