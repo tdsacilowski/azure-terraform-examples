@@ -49,8 +49,8 @@ allowed_cidr_blocks = [
 only_allowed_cidrs = rule {
 	all get_resources("azurerm_sql_firewall_rule") as fw {
         all allowed_cidr_blocks as allowed_cidr {
-            sockaddr.is_contained(allowed_cidr, w.applied.start_ip_address) and
-            sockaddr.is_contained(allowed_cidr, w.applied.end_ip_address)
+            sockaddr.is_contained(allowed_cidr, fw.applied.start_ip_address) and
+            sockaddr.is_contained(allowed_cidr, fw.applied.end_ip_address)
         }
 	}
 }
