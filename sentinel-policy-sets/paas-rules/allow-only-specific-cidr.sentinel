@@ -43,7 +43,7 @@ get_resources_all_modules = func(type) {
 }
 
 allowed_cidr_blocks = [
-	"10.0.0.0/16"
+	"10.0.0.0/16",
 ]
 
 only_allowed_cidrs = rule {
