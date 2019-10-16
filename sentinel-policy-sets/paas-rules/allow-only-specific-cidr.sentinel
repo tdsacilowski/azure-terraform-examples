@@ -1,4 +1,5 @@
 import "tfplan"
+import "sockaddr"
 
 # Get an array of all resources of the given type (or an empty array).
 get_resources = func(type) {
@@ -47,12 +48,13 @@ allowed_cidr_blocks = [
 
 only_allowed_cidrs = rule {
 	all get_resources("azurerm_sql_firewall_rule") as fw {
-		all fw.applied.security_rule as _, sr {
-			(sr.source_address_prefix not in disallowed_cidr_blocks) or sr.access == "Deny"
-		}
+        all allowed_cidr_blocks as allowed_cidr {
+            sockaddr.is_contained(allowed_cidr, w.applied.start_ip_address) and
+            sockaddr.is_contained(allowed_cidr, w.applied.end_ip_address)
+        }
 	}
 }
 
 main = rule {
-	(block_allow_all) else true
+	(only_allowed_cidrs) else true
 }
