@@ -1,3 +1,3 @@
-policy "deny-sg-allow-all" {
+policy "allow-only-specific-cidr" {
     enforcement_level = "soft-mandatory"
 }

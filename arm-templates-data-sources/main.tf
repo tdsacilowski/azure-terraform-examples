@@ -96,7 +96,6 @@ data "azurerm_virtual_network" "example" {
   resource_group_name = "${azurerm_resource_group.example.name}"
 }
 
-
 #-------------------------------------------------------------------------------
 # Create a Subnet in Which We'll Deploy Our VM
 #-------------------------------------------------------------------------------
@@ -108,7 +107,7 @@ resource "azurerm_subnet" "example" {
 }
 
 #-------------------------------------------------------------------------------
-# Create our Public IP Address and Network Security Group
+# Create a Public IP Address to Attach to our VM
 #-------------------------------------------------------------------------------
 resource "azurerm_public_ip" "example" {
     name                         = "${var.environment_name}-public-ip"
@@ -121,6 +120,20 @@ resource "azurerm_public_ip" "example" {
     }
 }
 
+#-------------------------------------------------------------------------------
+# Data Source to Query the Public IP
+# 
+# Note: we need to query this after the resource is created just due to how
+# the address is created on the Azure side
+#-------------------------------------------------------------------------------
+data "azurerm_public_ip" "example" {
+  name                = "${azurerm_public_ip.example.name}"
+  resource_group_name = "${azurerm_virtual_machine.example.resource_group_name}"
+}
+
+#-------------------------------------------------------------------------------
+# Create a NSG to Control Ingress Into Our VM
+#-------------------------------------------------------------------------------
 resource "azurerm_network_security_group" "example" {
     name                = "${var.environment_name}-security-group"
     location            = "${azurerm_resource_group.example.location}"
@@ -145,7 +158,7 @@ resource "azurerm_network_security_group" "example" {
 }
 
 #-------------------------------------------------------------------------------
-# Create our VM in the Resource Group and VNet Created Above
+# Create a Network Interface with Attached Public IP and Associated VM 
 #-------------------------------------------------------------------------------
 resource "azurerm_network_interface" "example" {
   name                      = "${var.environment_name}-nic"
@@ -199,7 +212,4 @@ resource "azurerm_virtual_machine" "example" {
   }
 }
 
-data "azurerm_public_ip" "example" {
-  name                = "${azurerm_public_ip.example.name}"
-  resource_group_name = "${azurerm_virtual_machine.example.resource_group_name}"
-}
+
