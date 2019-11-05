@@ -1,5 +1,12 @@
+# This policy uses the Sentinel tfplan import to ensure only allowed
+# IP ranges are used for SQL Firewall rules
+
+##### Imports #####
+
 import "tfplan"
 import "sockaddr"
+
+##### Functions #####
 
 # Get an array of all resources of the given type (or an empty array).
 get_resources = func(type) {
@@ -42,9 +49,7 @@ get_resources_all_modules = func(type) {
 	return resources
 }
 
-allowed_cidr_blocks = [
-	"10.0.0.0/16",
-]
+##### Rules #####
 
 only_allowed_cidrs = rule {
 	all get_resources("azurerm_sql_firewall_rule") as fw {
@@ -55,6 +60,14 @@ only_allowed_cidrs = rule {
 	}
 }
 
+##### Lists #####
+
+allowed_cidr_blocks = [
+	"10.0.0.0/16",
+]
+
+##### Main #####
+
 main = rule {
-	(only_allowed_cidrs) else true
+	only_allowed_cidrs
 }
