@@ -42,7 +42,7 @@ find_resources_from_plan = func(type) {
 ### Rules ###
 
 deny_services = rule {
-    any denied_azure_services as denied {
+    not any denied_azure_services as denied {
         length( find_resources_from_plan(denied)) > 0
     }
 }
