@@ -41,20 +41,21 @@ find_resources_from_plan = func(type) {
 
 ### Rules ###
 
-deny_services = rule {
-    not any denied_azure_services as denied {
-        length( find_resources_from_plan(denied)) > 0
+# Check to see if any of the denied services exist in the plan
+denied_services_exist = rule {
+    any denied_services as denied_service {
+        length( find_resources_from_plan(denied_service) ) > 0
     }
 }
 
 ##### Lists #####
 
-# Denied Azure Services
-denied_azure_services = [
+# Denied Services
+denied_services = [
   "azurerm_mariadb_database",
   "azurerm_mariadb_server",
 ]
 
 main = rule {
-	deny_services
+	not denied_services_exist
 }
