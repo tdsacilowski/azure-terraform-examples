@@ -1,8 +1,5 @@
 provider "azurerm" {}
 
-variable "vm_size" {
-  default = "Standard_B1s"
-}
 resource "azurerm_virtual_machine" "main" {
   name                  = "${var.prefix}-vm"
   location              = "${azurerm_resource_group.main.location}"
