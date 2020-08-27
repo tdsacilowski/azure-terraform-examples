@@ -1,4 +1,6 @@
-provider "azurerm" {}
+provider "azurerm" {
+  features {}
+}
 
 resource "azurerm_virtual_machine" "main" {
   name                  = "${var.prefix}-vm"
